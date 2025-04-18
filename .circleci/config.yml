@@ -30,6 +30,7 @@ jobs:
             - maven-repo-v1-{{ .Branch }}-{{ checksum "pom.xml" }}
             - maven-repo-v1-{{ .Branch }}-
             - maven-repo-v1-
+      - assume_oidc_role
       - run:
           name: setup
           command: |
