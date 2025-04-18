@@ -5,9 +5,9 @@ orbs:
 executors:
   default:
     docker:
-      - image: 'cimg/openjdk:8.0'
+      - image: cimg/openjdk:8.0
     environment:
-      AWS_REGION: 'us-east-1'
+      AWS_REGION: us-east-1
 
 commands:
   assume_oidc_role:
@@ -31,14 +31,12 @@ jobs:
             - maven-repo-v1-{{ .Branch }}-
             - maven-repo-v1-
       - run:
-          name: 'sonarqube_analysis'
+          name: build
           command: |
-            ./mvnw package
-            ./mvnw sonar:sonar \
-              -Dsonar.projectKey=contentful.java \
-              -Dsonar.token=squ_2628015bb5df692ff692ab0bec8c23ebd3af6b3f \
-              -Dsonar.host.url=https://sonar.cicd.figs-hq.com \
-              -Dsonar.java.binaries=target/classes
+            mkdir -p ~/.m2
+            cp .circleci/settings.xml ~/.m2
+            export CODEARTIFACT_AUTH_TOKEN=$(aws codeartifact get-authorization-token --domain app-figs --domain-owner 640667908132 --query authorizationToken --output text)
+            ./mvnw deploy
       - save_cache:
           key: maven-repo-v1-{{ .Branch }}-{{ checksum "pom.xml" }}
           paths:
