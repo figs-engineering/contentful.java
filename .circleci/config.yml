@@ -1,0 +1,54 @@
+version: 2.1
+orbs:
+  aws-cli: circleci/aws-cli@4.0
+  maven: circleci/maven@1.4.1
+executors:
+  default:
+    docker:
+      - image: 'cimg/openjdk:8.0'
+    environment:
+      AWS_REGION: 'us-east-1'
+
+commands:
+  assume_oidc_role:
+    steps:
+      - aws-cli/setup:
+          profile_name: default
+          role_arn: arn:aws:iam::640667908132:role/CIRCLECI-OIDC-ROLE
+          role_session_name: ephemeral-session
+          session_duration: "1800"
+          region: ${AWS_REGION}
+
+jobs:
+  build:
+    executor: default
+    resource_class: figs-engineering/figs-cicd
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - maven-repo-v1-{{ .Branch }}-{{ checksum "pom.xml" }}
+            - maven-repo-v1-{{ .Branch }}-
+            - maven-repo-v1-
+      - run:
+          name: 'sonarqube_analysis'
+          command: |
+            ./mvnw package
+            ./mvnw sonar:sonar \
+              -Dsonar.projectKey=contentful.java \
+              -Dsonar.token=squ_2628015bb5df692ff692ab0bec8c23ebd3af6b3f \
+              -Dsonar.host.url=https://sonar.cicd.figs-hq.com \
+              -Dsonar.java.binaries=target/classes
+      - save_cache:
+          key: maven-repo-v1-{{ .Branch }}-{{ checksum "pom.xml" }}
+          paths:
+            - ~/.m2/repository
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - project
+
+workflows:
+  build-workflow:
+    jobs:
+      - build
