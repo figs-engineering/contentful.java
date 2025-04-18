@@ -36,14 +36,10 @@ jobs:
           command: |
             mkdir -p ~/.m2
             cp .circleci/settings.xml ~/.m2
-            codeartifact_auth_token=$(aws codeartifact get-authorization-token --domain app-figs --domain-owner 640667908132 --query authorizationToken --output text)
-            echo codeartifact_auth_token=${codeartifact_auth_token}
-            echo "export CODEARTIFACT_AUTH_TOKEN=${codeartifact_auth_token}" >> $BASH_ENV
+            echo "export CODEARTIFACT_AUTH_TOKEN=$(aws codeartifact get-authorization-token --domain app-figs --domain-owner 640667908132 --query authorizationToken --output text)" >> $BASH_ENV
       - run:
           name: build
-          command: |
-            echo CODEARTIFACT_AUTH_TOKEN=${CODEARTIFACT_AUTH_TOKEN}
-            ./mvnw deploy
+          command: ./mvnw deploy
       - save_cache:
           key: maven-repo-v1-{{ .Branch }}-{{ checksum "pom.xml" }}
           paths:
