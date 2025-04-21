@@ -168,8 +168,10 @@ public class RichTextFactory {
 
         for (final String locale : rawValue.keySet()) {
             final CDARichDocument document = entry.getField(locale, field.id());
-            for (final CDARichNode node : document.getContent()) {
-                resolveOneLink(array, field, locale, node);
+            if (document != null) {
+                for (final CDARichNode node : document.getContent()) {
+                    resolveOneLink(array, field, locale, node);
+                }
             }
         }
     }
