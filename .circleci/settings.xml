@@ -1,6 +1,11 @@
 <settings>
     <servers>
         <server>
+            <id>repository</id>
+            <username>figs-ci-bot</username>
+            <password>${env.CI_BOT_GITHUB_ACCESS_TOKEN}</password>
+        </server>
+        <server>
             <id>artifactory</id>
             <username>aws</username>
             <password>${env.CODEARTIFACT_AUTH_TOKEN}</password>

@@ -44,18 +44,9 @@ jobs:
             - run:
                 name: release
                 command: |
-                  export GRGIT_USER=figs-ci-bot
-                  export GRGIT_PASS=$CI_BOT_GITHUB_ACCESS_TOKEN
-                
-                  git config --global user.name "$GRGIT_USER"
-                  git config --global user.email "figs.engineering+$GRGIT_USER@wearfigs.com"
-                
-                  git remote rm origin
-                  git remote add origin "https://figs-ci-bot:$CI_BOT_GITHUB_ACCESS_TOKEN@github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME"
-                
-                  git fetch origin
-                
-                  git branch --set-upstream-to "origin/$CIRCLE_BRANCH"
+                  git config --global user.name "figs-ci-bot"
+                  git config --global user.email "figs.engineering+figs-ci-bot@wearfigs.com"
+                  
                   ./mvnw -B release:prepare release:perform deploy
       - unless:
           condition:

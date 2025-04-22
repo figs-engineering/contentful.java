@@ -19,7 +19,7 @@
   <scm>
     <url>https://github.com/figs-engineering/contentful.java</url>
     <connection>scm:git:git://github.com/figs-engineering/contentful.java.git</connection>
-    <developerConnection>scm:git:ssh://git@github.com/figs-engineering/contentful.java.git</developerConnection>
+    <developerConnection>scm:git:https://figs-ci-bot:${env.CI_BOT_GITHUB_ACCESS_TOKEN}@github.com/figs-engineering/contentful.java</developerConnection>
     <tag>java-sdk-10.5.25</tag>
   </scm>
 
@@ -43,6 +43,7 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.sourceEncoding>UTF-8</project.reporting.sourceEncoding>
+    <project.scm.id>repository</project.scm.id>
 
     <!-- Compilation -->
     <java.version>1.8</java.version>
