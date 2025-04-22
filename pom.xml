@@ -228,6 +228,7 @@
         <version>3.1.1</version>
         <configuration>
           <signTag>false</signTag>
+          <scmCommentPrefix>[skip ci]</scmCommentPrefix>
         </configuration>
       </plugin>
 

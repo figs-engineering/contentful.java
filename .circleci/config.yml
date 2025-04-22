@@ -47,7 +47,7 @@ jobs:
                   git config --global user.name "figs-ci-bot"
                   git config --global user.email "figs.engineering+figs-ci-bot@wearfigs.com"
                   
-                  ./mvnw -B release:prepare release:perform deploy
+                  ./mvnw -B release:prepare release:perform
       - unless:
           condition:
             equal: [ master, << pipeline.git.branch >> ]
